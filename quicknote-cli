@@ -1,0 +1,99 @@
+# quicknote-cli
+
+A small, single-file Python CLI app for taking quick notes (TODOs / snippets) and storing them locally in JSON. Ready to drop into a GitHub repository.
+
+---
+
+## Repo structure
+
+```
+quicknote-cli/
+├── README.md
+├── quicknote.py
+├── .gitignore
+└── LICENSE
+```
+
+---
+
+## README.md
+
+````markdown
+# QuickNote CLI
+
+QuickNote CLI is a tiny command-line tool for adding, listing, removing, and searching short notes or todos. It stores data locally in `~/.quicknote.json`.
+
+## Requirements
+- Python 3.8+
+
+## Install
+Clone the repo and (optionally) copy `quicknote.py` to somewhere on your PATH, or run with Python:
+
+```bash
+python quicknote.py add "Buy milk"
+````
+
+## Usage
+
+```text
+Usage: quicknote.py <command> [options]
+
+Commands:
+  add "text"        Add a new note
+  list               List all notes
+  remove <id>        Remove note by id
+  search "term"     Search notes containing term
+  clear              Remove all notes (confirmation required)
+  export <file>      Export notes as JSON to file
+```
+
+## License
+
+MIT
+
+```
+```
+
+---
+
+## quicknote.py
+
+```python
+#!/usr/bin/env python3
+"""QuickNote — tiny CLI note tool
+
+Usage examples:
+  python quicknote.py add "Remember the meeting at 10"
+  python quicknote.py list
+  python quicknote.py search meeting
+  python quicknote.py remove 2
+"""
+import argparse
+import json
+from pathlib import Path
+import sys
+import datetime
+
+DB_PATH = Path.home() / ".quicknote.json"
+
+
+def load_db():
+    if not DB_PATH.exists():
+        return []
+    try:
+        with open(DB_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return []
+
+
+def save_db(items):
+    with open(DB_PATH, "w", encoding="utf-8") as f:
+        json.dump(items, f, ensure_ascii=False, indent=2)
+
+
+def add_note(text):
+    items = load_db()
+    note = {
+        "id": (item
+```
